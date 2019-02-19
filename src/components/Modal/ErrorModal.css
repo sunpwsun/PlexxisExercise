@@ -1,0 +1,29 @@
+.modalCloseBtn {
+    border : 1px solid rgb(79, 132, 201);
+    text-align: center;
+    padding : 3px;
+    border-radius: 5px;
+    color : rgb(76, 68, 68);
+}
+
+.modalCloseBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #276baa;
+    transition-duration: 0.5s;
+}
+
+.modalOkBtn {
+    font-size: 1.2rem;
+    width : 100%;
+    border-radius: 5px;
+    border : 1px solid rgb(79, 132, 201);
+    color :  rgb(79, 132, 201);
+}
+
+.modalOkBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #276baa;
+    transition-duration: 0.5s;
+}

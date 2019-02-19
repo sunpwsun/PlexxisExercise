@@ -1,0 +1,9 @@
+.AppTitle {
+    background-color: rgb(95, 108, 114);
+    font-size: 2rem;
+    font-weight: 600;
+    padding-left: 2rem;
+    padding-top : 0.5rem;
+    padding-bottom : 0.5rem;
+    color:white;
+}

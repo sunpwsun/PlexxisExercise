@@ -1,0 +1,74 @@
+.buttons {
+    text-align: right;
+    margin-bottom : 20px;
+}
+
+
+.addButton {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid #62abf0 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #7db8f0;
+    padding: 5px 30px 5px 30px ;
+
+    transition-duration: 0.5s;
+    
+}
+.addButton:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #276baa;
+    transition-duration: 0.5s;
+}
+
+
+.editButton {
+    display : inline;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid #1ad31a 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #1ad31a;
+    padding: 5px 5px 5px 5px ;
+
+    transition-duration: 0.5s;
+}
+.editButton:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1ad31a;
+    transition-duration: 0.5s;
+}
+
+
+
+.deleteButton {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid  #db341e 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #db341e;
+    padding: 5px 15px 5px 15px ;
+    margin-left: 10px;   
+    margin-right : 20px;
+
+    transition-duration: 0.5s;
+}
+.deleteButton:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #db341e;
+    transition-duration: 0.5s;
+}

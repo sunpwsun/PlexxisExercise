@@ -1,0 +1,112 @@
+.addEmployeeForm {
+
+    margin-bottom : 10px;
+    border-radius : 5px;
+    padding : 15px;
+    min-width: 1000px;
+
+    border : 1px solid rgb(100, 167, 223);
+
+    background-color: rgb(236, 252, 251);
+    
+}
+
+
+.grid-container {
+    display: grid;
+    /*                     Name    Code   Profession  Color    City    Branch    assigned    Add    Cancel   */
+    grid-template-columns: 15%     5%     15%         10%      12%      12%      12%         1fr;
+}
+
+
+
+.btnContainer {
+    display: grid;
+   
+    grid-template-columns: 1fr 50px 90px
+}
+
+.cell {
+
+    font-size: 1.1rem;
+    font-weight : 500;
+    margin-left : 5px;
+
+}
+
+.inputText {
+    width : 95%;
+    font-size: 1.1rem;
+    border : none;
+    border-bottom : 1px solid rgb(100, 167, 223);
+    /* background-color: rgb(232, 249, 250); */
+    background-color: rgb(236, 252, 251);
+
+    padding: 2px;
+
+}
+
+
+select {
+    margin-left : 5px;
+    width : 95%;
+
+    color : rgb(14, 114, 64);
+    font-size: 1.1rem;
+    font-weight: 600;
+    /* border:0px; */
+    border : none;
+    /* outline:0px; */
+
+    /* background-color: rgb(232, 249, 250); */
+    background-color: rgb(236, 252, 251);
+
+    border-bottom : 1px solid rgb(100, 167, 223);
+    border-radius : 0px;
+}
+
+
+.btnAdd {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid #62abf0 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #7db8f0;
+    padding: 5px 10px 5px 10px ;
+
+    transition-duration: 0.5s;
+}
+
+.btnAdd:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #276baa;
+    transition-duration: 0.5s;
+}
+
+.btnCancel {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid #db341e 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #db341e;
+    padding: 5px 10px 5px 10px ;
+
+    transition-duration: 0.5s;
+    margin-left : 10px;
+}
+
+.btnCancel:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #db341e;
+    transition-duration: 0.5s;
+}
