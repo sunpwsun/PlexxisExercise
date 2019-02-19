@@ -2,7 +2,7 @@
 ## About this application
 This is for the assessment for full-stack position at Plexxis.
 It is a simple but robust React application accessing MariaDB on Amazon RDS.
-It was really a challenging but interesting work for me because it was another opportunity to meet useful library like react-table or sequelize although there was a learning curve to learn them. ( But I am comfortable with them the ins and outs. )
+It was really a challenging but interesting work for me because it was another opportunity to meet useful libraries like react-table or sequelize although there was a learning curve to learn them. ( But I am comfortable with them the ins and outs. )
 
 ## How to run
 Follow the steps:
