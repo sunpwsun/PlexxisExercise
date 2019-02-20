@@ -19,6 +19,7 @@
     "react-scripts": "1.1.4",
     "react-table": "^6.9.2",
     "react-toggle-button": "^2.2.0",
+    "react-tooltip": "^3.9.2",
     "react-window": "^1.5.1",
     "sequelize": "^4.42.0",
     "styled-components": "^4.1.3"

@@ -4,7 +4,7 @@ import EditEmployeeForm from '../EditEmployeeForm/EditEmployeeForm'
 import { Input } from '../Table/Styles'
 import Table from '../Table/Table'
 import axios from 'axios'
-
+import ReactTooltip from 'react-tooltip'
 
 const URL = 'http://localhost:8080'
 
@@ -93,9 +93,6 @@ const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
 }
 
 
-
-
-
 const initSelected = new Array(1000).fill(false)
 
 
@@ -173,29 +170,29 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
             minWidth: 160,
             maxWidth: 200,
         },
+
+
         {
             Header: "Color",
             accessor: "color",
             width: 130,
             Cell: row => (
-                <div
-                    style={{
-                        width: `100%`,
-                        minWidth: "5px",
-                        height: "20px",
-                        // backgroundColor: `hsla(${row.value}, 100%, 45%, 1)`,
-                        backgroundColor: `${row.value}`,
-                        color : `${row.value}`,
-                        borderRadius: "2px",
-                        transition: "all .4s ease",
-
-                        "&:hover": {
-                            backgroundColor : 'white',
-                            fontWeight : '500'
-                        }
-                    }}
-                >
-                {row.value}
+                <div>
+                    <div data-tip data-for='`${row.value}`'
+                        style={{
+                            width: `100%`,
+                            minWidth: "5px",
+                            height: "20px",
+                            // backgroundColor: `hsla(${row.value}, 100%, 45%, 1)`,
+                            backgroundColor: `${row.value}`,
+                            color : `${row.value}`,
+                            borderRadius: "2px",
+                            transition: "all .4s ease"
+                        }}
+                    >
+                    {row.value}
+                    </div>
+ 
                 </div>
             )
         },

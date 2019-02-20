@@ -112,7 +112,6 @@ class EditCityModal extends Component {
             this.setState( { cities : res.data, cityName : '' } )
         })
 
-    
 
     }
 
