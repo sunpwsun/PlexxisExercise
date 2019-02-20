@@ -1,34 +1,51 @@
 # Plexxis Interview Exercise
-## Requirements
-Create a simple but __impressive__ (looks good, works well, has intuitive design, etc.) CRUD application that can do the following:
+## About this application
+This is for the assessment for full-stack position at Plexxis.
+It is a simple but robust React application accessing MariaDB on Amazon RDS.
+It was really a challenging but interesting work for me because it was another opportunity to meet useful libraries like react-table or sequelize although there was a learning curve to learn them. ( But I am comfortable with them the ins and outs. )
 
-1) Retrieve employees from a REST API  
-2) Display the employees in a React application  
-3) Has UI mechanisms for creating and deleting employees  
-4) Has API endpoints for creating and deleting employees  
-5) Edit your version of the `README.md` file to explain to us what things you did, where you focussed your effort, etc.
+## How to run
+Follow the steps:
 
-*Read over the `Bonus` objectives and consider tackling those items as well*
+1) git clone https://github.com/sunpwsun/PlexxisExercise.git
+2) cd PlexxisExercise
+3) npm install
+4) npm start
 
-## Bonus (Highly Encouraged)
+## Used Libraries 
+1) Back-end :
+ - Node.js
+ - MariaDB on Amazon RDS
+ - sequelize (OMR for MariaDB)
+ 
+2) Front-end :
+ - React.js
+ - react-table for displaying data
+ - axios for accessing DBMS
+ 
+## Features
+1) It fetches and presents the employees data.
+2) It adds new employee's record.
+3) It updates and delete employee's record.
+ 
+## REST API
+|  URL               |Param    |Method  |    Description                        |
+|--------------------|---------|--------|---------------------------------------|
+|/api/employees      |-     | GET    | Read all employees' records           |
+|/api/employee/:id   |id       | GET    | Read a employee's record with the id  |
+|/api/employee      |employee | POST   | Create a new record                   |
+|/api/employee/:id  |id       | PUT   | Update the record with id             |
+|/api/employee/:i   |id       | DELETE | Remove the record with id             |
+|/api/cities      |-     | GET    | Read all citys           |
+|/api/city/:id   |id       | GET    | Read a city record with the id  |
+|/api/city      |city | POST   | Create a new city                   |
+|/api/city/:id  |id       | PUT   | Update the city record with id             |
+|/api/branches      |-     | GET    | Read all branches           |
+|/api/branch/:id   |id       | GET    | Read a city branch with the id  |
+|/api/branch      |branch | POST   | Create a new branch                   |
+|/api/branch/:id  |id       | PUT   | Update the branch record with id             |
+|/api/professions      |-     | GET    | Read all professions           |
+|/api/profession/:id   |id       | GET    | Read a profession record with the id  |
+|/api/profession      |profession | POST   | Create a new record                   |
+|/api/profession/:id  |id       | PUT   | Update the record with id             |
 
-1) Use a relational database to store the data (SQLite, MariaDB, Postgres)  
-2) UI mechanisms to edit/update employee data  
-3) Add API endpoint to update employee data  
-4) Use [React Table](https://react-table.js.org)  
-
-## Getting Started
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). The front-end app runs off localhost:3000. The REST API is located in the /server folder and runs off localhost:8080. The data is being served from a JSON file located in the /server/data folder. Run `npm start` to start both servers.
-
-## Getting it Done
-* You are free to use whatever libraries that you want. Be prepared to defend your decisions.
-* There is no time limit. Use as little or as much time as is necessary to showcase your abilities.
-* You should fork or clone our repository into your own repository.
-  * Send us the link when you are done the exercise (pglinker at plexxis dot com).
-
-If you do well on the test, we will bring you in for an interview. Your test results will be used as talking points.  
-
- __This is your chance to amaze us with your talent!__
-# PlexxisAssessment
-# PlexxisAssessment
-# PlexxisExercise
