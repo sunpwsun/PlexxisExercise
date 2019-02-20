@@ -1,0 +1,54 @@
+.rowContainer {
+    display: grid;
+    /*                     Name    Active/Inactive   */
+    grid-template-columns: 200px       100px;
+    padding : 5px;
+    border-bottom : 1px solid rgb(158, 170, 211);
+
+    color : rgb(91, 93, 99);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.rowHeader {
+    display: grid;
+    /*                     Name    Active/Inactive   */
+    grid-template-columns: 200px       100px;
+    padding : 5px;
+    border-bottom : 1px solid rgb(158, 170, 211);
+
+    color : rgb(91, 93, 99);
+    font-size: 1.1rem;
+    font-weight: 600;  
+}
+
+.rowName{
+    padding-left : 10px;
+}
+
+.switch {
+    text-align: right;
+    margin-left : 25px;
+}
+
+
+.addBtn {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: solid #62abf0 1px;
+    border-radius: 5px;
+    /* color: white; */
+    color: #7db8f0;
+    padding: 5px 30px 5px 30px ;
+
+    transition-duration: 0.5s;
+    
+}
+.addBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #276baa;
+    transition-duration: 0.5s;
+}

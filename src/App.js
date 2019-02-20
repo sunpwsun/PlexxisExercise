@@ -1,6 +1,7 @@
 import React from 'react'
 import Title from './components/Title/Title'
 import EmployeeButtons from './components/Buttons/EmployeeButtons'
+import CompanyButtons from './components/Buttons/CompanyButtons'
 import TableContainer from './components/TableContainer/TableContainer'
 import './App.css'
 
@@ -8,6 +9,10 @@ import './App.css'
 class App extends React.Component {
 
     state = {
+        // employees : [],
+        // cities : [],
+        // branches : [],
+        // professions : [],
 
         showDeleteButton : false,
         selected : [],
@@ -56,6 +61,7 @@ class App extends React.Component {
                     <TableContainer onShowDeleteButton={this.onShowDeleteButton}
                                     hideAddBtn={this.hideAddBtn}  
                                     hideEditBtn={this.state.hideEditBtn}  />
+                    <CompanyButtons />
                 </div>
             </div>
         )

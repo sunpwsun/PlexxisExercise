@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ErrorModal from '../Modal/ErrorModal'
 import './EditEmployeeForm.css'
-import DropdownList from '../DropdownList/DropdownList'
 import * as tools from '../../tools'
 
 import axios from 'axios'
@@ -43,6 +42,7 @@ class EditEmployeeForm extends Component {
         modalIsOpen: false,
         modalTitle : '',
         modalMessage: '',
+        reload : false,
 
 
         professionSelect : [],
@@ -133,6 +133,9 @@ class EditEmployeeForm extends Component {
         }
 
 
+console.log( '[assignedSelect]' , assignedSelect)
+
+
         this.setState({
             ...this.state,
             name : data[ index ].name,
@@ -150,8 +153,8 @@ class EditEmployeeForm extends Component {
         })
     }
 
-    openModal = ( modalTitle, modalMessage ) => {      
-        this.setState({modalIsOpen: true, modalTitle, modalMessage})
+    openModal = ( modalTitle, modalMessage, reload ) => {      
+        this.setState({modalIsOpen: true, modalTitle, modalMessage, reload })
     }
     
 
@@ -183,17 +186,17 @@ class EditEmployeeForm extends Component {
 
         // validate name
         if( name.trim().length < 4 ) {
-            this.openModal( 'Error', 'Length of Name must be longer than Four!')
+            this.openModal( 'Error', 'Length of Name must be longer than Four!', false)
             return
         }
 
         // validate code
         if( code.length !== 4 ) {
-            this.openModal( 'Error', 'Length of Code must be Four!')
+            this.openModal( 'Error', 'Length of Code must be Four!', false)
             return
         }
         if( !/^([A-Z0-9]{4})$/.test( code )) {
-            this.openModal( 'Error', 'Code accepts only alphabets or numbers!')
+            this.openModal( 'Error', 'Code accepts only alphabets or numbers!', false)
             return
         }
 
@@ -202,38 +205,38 @@ class EditEmployeeForm extends Component {
         let _color = this.state.color.trim()
         if( _color.charAt( 0 ) === '#' ) {
             if(   !/^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/.test( _color )  ) {
-                this.openModal( 'Error', `${_color}. Wrong Color Expression!`)
+                this.openModal( 'Error', `${_color}. Wrong Color Expression!`, false)
                 return
             }
         }
         else {      // white, yellow, red, ....
             if( tools.colorNames.findIndex( c => c === _color.toLocaleLowerCase() ) < 0 ) {
-                this.openModal( 'Error', `${_color}. No matched Color!`)
+                this.openModal( 'Error', `${_color}. No matched Color!`, false)
                 return
             }
         }
 
         // validate profession
         if( professionId < 1 ) {
-            this.openModal( 'Error', 'Choose Profession!')
+            this.openModal( 'Error', 'Choose Profession!', false)
             return
         }
 
         // validate city
         if( cityId < 1 ) {
-            this.openModal( 'Error', 'Choose City!')
+            this.openModal( 'Error', 'Choose City!', false)
             return
         }
 
         // validate branch
         if( branchId < 1 ) {
-            this.openModal( 'Error', 'Choose Branch!')
+            this.openModal( 'Error', 'Choose Branch!', false)
             return
         }
 
         // validate assigned
         if( assigned < 1 ) {
-            this.openModal( 'Error', 'Choose Assigned!')
+            this.openModal( 'Error', 'Choose Assigned!', false)
             return
         }
 
@@ -243,18 +246,18 @@ class EditEmployeeForm extends Component {
 
 
                 if( res.data.message !== 'OK') {
-                    this.openModal( 'Error', res.data.message.errors[0].message)
+                    this.openModal( 'Error', res.data.message.errors[0].message, false)
                     return
                 }
             })
             .catch( err => {
-                this.openModal( 'Error', err )
+                this.openModal( 'Error', err , false)
                 return
             })
 
 
         // Success pop-up 
-        this.openModal( 'Employee Updated', `Employee '${name}' was successfully updated.`)
+        this.openModal( 'Employee Updated', `Employee '${name}' was successfully updated.`, true)
 
 
     }
@@ -292,7 +295,8 @@ class EditEmployeeForm extends Component {
             professionId : v
         })
     }
-    onAssignedChange= (e) => {     
+    onAssignedChange= (e) => {
+  console.log('onAssignedChange', e.target.value)      
         this.setState({
             ...this.state,
             assigned : e.target.value
@@ -371,6 +375,7 @@ class EditEmployeeForm extends Component {
                     closeModal={this.closeModal}
                     title={this.state.modalTitle}
                     message={this.state.modalMessage}
+                    reload={this.state.reload}
                     />
                 
             </div>

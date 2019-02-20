@@ -1,0 +1,68 @@
+.companyButtons{
+    text-align: right;
+    margin-bottom : 20px;
+}
+
+
+.professionBtn {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    color: #1a65aa;
+    padding: 5px 15px 5px 15px ;
+
+    transition-duration: 0.2s;
+}
+.professionBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1a65aa;
+    transition-duration: 0.2s;
+}
+
+
+.cityBtn {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+
+    color: #1a65aa;
+    padding: 5px 15px 5px 15px ;
+    margin-left: 20px;   
+
+    transition-duration: 0.2s;
+}
+.cityBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1a65aa;
+    transition-duration: 0.2s;
+}
+
+
+
+.branchBtn {
+    display : inline;
+
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+
+    /* color: white; */
+    color: #1a65aa;
+    padding: 5px 15px 5px 15px ;
+    margin-left: 20px;   
+    margin-right : 20px;
+
+    transition-duration: 0.2s;
+}
+.branchBtn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #1a65aa;
+    transition-duration: 0.2s;
+}

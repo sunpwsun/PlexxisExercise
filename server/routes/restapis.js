@@ -3,6 +3,10 @@ const cors = require('cors')
 const mysql = require('mysql')
 
 
+// 아래 참고해서 api 분리
+// https://github.com/BumjuneKim/sequelize_tutorial/blob/master/app/models/books.js
+//
+
 module.exports = ( app ) => {
 
     const { Employees, Branches, Cities, Professions } = require('../models')
@@ -52,7 +56,7 @@ console.log('[POST] /api/employee/', name, code, professionId, color, cityId, br
             })
             .catch( err => {
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           
+                res.status( 200 )           //// check return code  again
                 res.send({message: err })
             })
     })
@@ -77,7 +81,7 @@ console.log('[PUT] /api/employee/', employeeId, name, code, professionId, color,
             .catch( err => {
                 console.log('[put err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           
+                res.status( 200 )           //// check return code  again
                 res.send({message:err})
             })
     })
@@ -96,7 +100,7 @@ console.log('[DELETE] /api/employee/', employeeId )
             .catch( err => {
                 console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )          
+                res.status( 200 )           //// check return code  again
                 res.send({message: err })
             })
     })
@@ -133,9 +137,12 @@ console.log('[DELETE] /api/employee/', employeeId )
             })
     })
     
+
+
+
     app.post('/api/branch/', (req, res, next) => {
         const { name, active } = req.body
-        console.log('[POST] /api/branches/', name )
+        console.log('[POST] /api/branches/', name, active )
     
         Branches.create( { 
                 branchId : null,
@@ -144,15 +151,17 @@ console.log('[DELETE] /api/employee/', employeeId )
             .then( e => {
                 res.setHeader('Content-Type', 'application/json');
                 res.status(200);
-                res.json( e )
+                res.json(  {message: 'OK' } )
             })
             .catch( err => {
                 console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )          
-                res.send({message:'ERROR'})
+                res.status( 200 )           //// check return code  again
+                res.send({message: err })
             })
     })
+
+
     
     app.put( '/api/branch/:id', (req, res, next) => {
 
@@ -165,18 +174,15 @@ console.log('[PUT] /api/branch/', branchId, name, active )
                     where : { name, active }
                 })
             })
-            .then( (res) => {
-                if( !res )
-                    throw "NO_RECORD"
-                console.log('[PUT] Updated branch: ', res )
+            .then( (e) => {
+                console.log('[PUT] Updated branch ')
                 res.setHeader('Content-Type', 'application/json');
                 res.status(200);
-                res.json( e )
+                res.json(  {message: 'OK' } )
             })
             .catch( err => {
-                console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           
+                res.status( 200 )          
                 res.send({message: err })
             })
     })
@@ -215,7 +221,7 @@ console.log('[PUT] /api/branch/', branchId, name, active )
     
     app.post('/api/city/', (req, res, next) => {
         const { name, active } = req.body
-        console.log('[POST] /api/city/', name )
+        console.log('[POST] /api/city/', name, active )
     
         Cities.create( { 
                 cityId : null,
@@ -224,13 +230,13 @@ console.log('[PUT] /api/branch/', branchId, name, active )
             .then( e => {
                 res.setHeader('Content-Type', 'application/json');
                 res.status(200);
-                res.json( e )
+                res.json( {message: 'OK' }  )
             })
             .catch( err => {
                 console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           
-                res.send({message:'ERROR'})
+                res.status( 200 )           //// check return code  again
+                res.send({message: err })
             })
     })
     
@@ -245,18 +251,15 @@ console.log('[PUT] /api/city/', cityId, name, active )
                     where : { cityId }
                 })
             })
-            .then( (res) => {
-                if( !res )
-                    throw "NO_RECORD"
-                console.log(' + Updated city: ', res )
+            .then( (e) => {
+                console.log('[PUT] Updated city ')
                 res.setHeader('Content-Type', 'application/json');
-                res.status(200);
-                res.json( e )
+                res.status(200)
+                res.json( {message: 'OK' } )
             })
             .catch( err => {
-                console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           
+                res.status( 200 )           //// check return code  again
                 res.send({message: err })
             })
     })
@@ -294,10 +297,31 @@ console.log('[GET] /api/professions')
                 console.log('[err]', err)
             })
     })
+    app.post('/api/city/', (req, res, next) => {
+        const { name, active } = req.body
+        console.log('[POST] /api/city/', name, active )
     
+        Cities.create( { 
+                cityId : null,
+                name, active
+            })
+            .then( e => {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(200);
+                res.json( {message: 'OK' }  )
+            })
+            .catch( err => {
+                console.log('[err]', err)
+                res.setHeader('Content-Type', 'application/json')
+                res.status( 200 )           //// check return code  again
+                res.send({message: err })
+            })
+    })
+
+
     app.post('/api/profession/', (req, res, next) => {
         const { name, active } = req.body
-        console.log('[POST] /api/profession/', name )
+        console.log('[POST] /api/profession/', name, active )
     
         Professions.create( { 
                 professionId : null,
@@ -306,16 +330,18 @@ console.log('[GET] /api/professions')
             .then( e => {
                 res.setHeader('Content-Type', 'application/json');
                 res.status(200);
-                res.json( e )
+                res.json( {message: 'OK' } )
             })
             .catch( err => {
                 console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )          
-                res.send({message:'ERROR'})
+                res.status( 200 )           //// check return code  again
+                res.send({message:'err'})
             })
     })
     
+
+
     app.put( '/api/profession/:id', (req, res, next) => {
 
         const professionId = req.params.id
@@ -327,18 +353,16 @@ console.log('[PUT] /api/profession/', professionId, name, active )
                     where : { name, active }
                 })
             })
-            .then( (res) => {
-                if( !res )
-                    throw "NO_RECORD"
-                console.log('[PUT] Updated profession: ', res)
+            .then( (e) => {
+
+                console.log('[PUT] Updated profession ')
                 res.setHeader('Content-Type', 'application/json');
                 res.status(200);
-                res.json( e )
+                res.json( {message: 'OK' }  )
             })
             .catch( err => {
-                console.log('[err]', err)
                 res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )          
+                res.status( 200 )           //// check return code  again
                 res.send({message: err})
             })
     })   

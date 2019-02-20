@@ -34,10 +34,9 @@ class ErrorModal extends Component {
                 onAfterOpen={this.afterOpenModal}
                 // onRequestClose={this.props.onRequestClose}
                 style={customStyles}
-                contentLabel="Example Modal"
                 >
 
-                <h2 ref={subtitle => this.subtitle = subtitle}>{this.props.title}</h2>
+                <h2 className='modalTitle' ref={subtitle => this.subtitle = subtitle}>{this.props.title}</h2>
                 <hr />
                 <br />
                 <div>{this.props.message}</div>
@@ -45,7 +44,7 @@ class ErrorModal extends Component {
                 <br />
                 <br />
                 {   
-                    this.props.title === 'Error' ?
+                    !this.props.reload ?
                     <div className='modalCloseBtn' onClick={() => this.props.closeModal(`${this.props.title}`)}>Close</div>
                     :
                     <form>

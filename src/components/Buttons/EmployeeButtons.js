@@ -18,8 +18,8 @@ class Buttons extends Component {
         modalMessage: ''
     }
 
-    openModal = ( modalTitle, modalMessage ) => {      
-        this.setState({modalIsOpen: true, modalTitle, modalMessage})
+    openModal = ( modalTitle, modalMessage, reload ) => {      
+        this.setState({modalIsOpen: true, modalTitle, modalMessage, reload })
     }
       
     closeModal = ( title ) => {
@@ -61,7 +61,7 @@ class Buttons extends Component {
                     }
                 })
                 .catch( err => {
-                    this.openModal( 'ERROR', `${err}. Check again.`)
+                    this.openModal( 'ERROR', `${err}. Check again.`, false)
                 })
             }
         }
@@ -73,9 +73,11 @@ class Buttons extends Component {
             newSelected[ deleted[i] ] = false
         }
 
+        console.log('newSelected', newSelected )
+
         if( deleted.length > 0 ) {
     
-            this.openModal( 'Deleted', `${deleted.length} Employee(s) deleted!`)
+            this.openModal( 'Deleted', `${deleted.length} Employee(s) deleted!`, true)
         }
     }
 
@@ -107,6 +109,7 @@ class Buttons extends Component {
                     closeModal={this.closeModal}
                     title={this.state.modalTitle}
                     message={this.state.modalMessage}
+                    reload={this.state.reload}
                     />
             </div>
         )
