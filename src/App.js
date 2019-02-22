@@ -9,10 +9,6 @@ import './App.css'
 class App extends React.Component {
 
     state = {
-        // employees : [],
-        // cities : [],
-        // branches : [],
-        // professions : [],
 
         showDeleteButton : false,
         selected : [],
@@ -25,7 +21,6 @@ class App extends React.Component {
     onShowDeleteButton = ( tf, newSelected ) => {
     
         this.setState({
-            ate,
             showDeleteButton : tf,
             selected : newSelected
         })
@@ -33,14 +28,12 @@ class App extends React.Component {
 
     hideAddBtn = (tf) => {
         this.setState({
-            ate,
             hideAddBtn : tf,
         }) 
     }
 
     hideEditBtn = (tf) => {
         this.setState({
-            ate,
             hideEditBtn : tf,
         }) 
     }

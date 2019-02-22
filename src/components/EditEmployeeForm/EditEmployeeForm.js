@@ -137,7 +137,6 @@ console.log( '[assignedSelect]' , assignedSelect)
 
 
         this.setState({
-            ate,
             name : data[ index ].name,
             code : data[ index ].code,
             professionId : data[ index ].professionId,
@@ -154,7 +153,12 @@ console.log( '[assignedSelect]' , assignedSelect)
     }
 
     openModal = ( modalTitle, modalMessage, reload ) => {      
-        this.setState({modalIsOpen: true, modalTitle, modalMessage, reload })
+        this.setState({ 
+            modalIsOpen: true, 
+            modalTitle, 
+            modalMessage, 
+            reload 
+        })
     }
     
 
@@ -177,7 +181,6 @@ console.log( '[assignedSelect]' , assignedSelect)
 
         // remove blanks of front and back
         this.setState( { 
-            ate,
             name: this.state.name.trim(),
             color : this.state.color.trim().toLocaleLowerCase(),
             code : this.state.code.trim()
@@ -264,7 +267,6 @@ console.log( '[assignedSelect]' , assignedSelect)
 
     onNameChange = (e) => {     
         this.setState({
-            ate,
             name: e.target.value
         })
     }
@@ -278,39 +280,33 @@ console.log( '[assignedSelect]' , assignedSelect)
             return
 
         this.setState({
-            ate,
             code: v
         })
     }
 
     onColorChange = (e) => {
         this.setState({
-            ate,
             color : e.target.value
         })
     }
     onProfessionChange = (v) => {
         this.setState({
-            ate,
             professionId : v
         })
     }
     onAssignedChange= (e) => {
   console.log('onAssignedChange', e.target.value)      
         this.setState({
-            ate,
             assigned : e.target.value
         })
     }
     onCityChange = (e) => {
         this.setState({
-            ate,
             cityId : e.target.value
         })
     }
     onBranchChange= (e) => {
         this.setState({
-            ate,
             branchId : e.target.value
         })
     }
@@ -318,18 +314,11 @@ console.log( '[assignedSelect]' , assignedSelect)
 
     render() {
 
-        const { professions, cities, branches, name, code, professionId, color, cityId, branchId, assigned,
-            professionSelect,
-            citySelect,
-            branchSelect,
-            assignedSelect      } = this.state
+        const { name, code, color, professionSelect, citySelect, branchSelect, assignedSelect } = this.state
         const { data, editCellId } = this.props
-//console.log('[data, editCellId]', data, editCellId )
 
         const index = data.findIndex( d => d.id === editCellId)
   
-
-
         return(
             <div className='editEmployeeForm'>
 

@@ -91,7 +91,6 @@ class AddEmployeeForm extends Component {
 
         // remove blanks of front and back
         this.setState( { 
-            ate,
             name: this.state.name.trim(),
             color : this.state.color.trim().toLocaleLowerCase(),
             code : this.state.code.trim()
@@ -179,7 +178,6 @@ console.log('[axios post res]', res)
 
     onNameChange = (e) => {     
         this.setState({
-            ate,
             name: e.target.value
         })
     }
@@ -193,38 +191,32 @@ console.log('[axios post res]', res)
             return
 
         this.setState({
-            ate,
             code: v
         })
     }
 
     onColorChange = (e) => {
         this.setState({
-            ate,
             color : e.target.value
         })
     }
     onProfessionChange = (v) => {
         this.setState({
-            ate,
             professionId : v
         })
     }
     onAssignedChange= (e) => {
         this.setState({
-            ate,
             assigned : e.target.value
         })
     }
     onCityChange = (e) => {
         this.setState({
-            ate,
             cityId : e.target.value
         })
     }
     onBranchChange= (e) => {
         this.setState({
-            ate,
             branchId : e.target.value
         })
     }

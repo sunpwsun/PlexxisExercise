@@ -44,7 +44,6 @@ class EditProfessionModal extends Component {
     onProfessionChange = (e) => {
 
         this.setState({
-            ate,
             professionName: e.target.value
         })
     }
@@ -65,7 +64,6 @@ class EditProfessionModal extends Component {
         const name = this.state.professionName.trim()
 
         this.setState({
-            ate,
             professionName: name
         })
 
@@ -173,7 +171,6 @@ class EditProfessionModal extends Component {
             active[ i ] = this.state.professions[ i ].active
         }
         this.setState({
-            ...this.setState,
             active
         })
     }
