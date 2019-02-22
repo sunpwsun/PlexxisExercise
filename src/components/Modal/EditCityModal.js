@@ -45,7 +45,7 @@ class EditCityModal extends Component {
     onCityChange = (e) => {
 
         this.setState({
-            ...this.state,
+            ate,
             cityName: e.target.value
         })
     }
@@ -66,7 +66,7 @@ class EditCityModal extends Component {
         const name = this.state.cityName.trim()
 
         this.setState({
-            ...this.state,
+            ate,
             cityName: name
         })
 

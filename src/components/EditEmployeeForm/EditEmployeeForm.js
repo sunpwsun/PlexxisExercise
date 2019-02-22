@@ -137,7 +137,7 @@ console.log( '[assignedSelect]' , assignedSelect)
 
 
         this.setState({
-            ...this.state,
+            ate,
             name : data[ index ].name,
             code : data[ index ].code,
             professionId : data[ index ].professionId,
@@ -177,7 +177,7 @@ console.log( '[assignedSelect]' , assignedSelect)
 
         // remove blanks of front and back
         this.setState( { 
-            ...this.state,
+            ate,
             name: this.state.name.trim(),
             color : this.state.color.trim().toLocaleLowerCase(),
             code : this.state.code.trim()
@@ -264,7 +264,7 @@ console.log( '[assignedSelect]' , assignedSelect)
 
     onNameChange = (e) => {     
         this.setState({
-            ...this.state,
+            ate,
             name: e.target.value
         })
     }
@@ -278,39 +278,39 @@ console.log( '[assignedSelect]' , assignedSelect)
             return
 
         this.setState({
-            ...this.state,
+            ate,
             code: v
         })
     }
 
     onColorChange = (e) => {
         this.setState({
-            ...this.state,
+            ate,
             color : e.target.value
         })
     }
     onProfessionChange = (v) => {
         this.setState({
-            ...this.state,
+            ate,
             professionId : v
         })
     }
     onAssignedChange= (e) => {
   console.log('onAssignedChange', e.target.value)      
         this.setState({
-            ...this.state,
+            ate,
             assigned : e.target.value
         })
     }
     onCityChange = (e) => {
         this.setState({
-            ...this.state,
+            ate,
             cityId : e.target.value
         })
     }
     onBranchChange= (e) => {
         this.setState({
-            ...this.state,
+            ate,
             branchId : e.target.value
         })
     }

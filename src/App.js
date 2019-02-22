@@ -25,7 +25,7 @@ class App extends React.Component {
     onShowDeleteButton = ( tf, newSelected ) => {
     
         this.setState({
-            ...this.state,
+            ate,
             showDeleteButton : tf,
             selected : newSelected
         })
@@ -33,14 +33,14 @@ class App extends React.Component {
 
     hideAddBtn = (tf) => {
         this.setState({
-            ...this.state,
+            ate,
             hideAddBtn : tf,
         }) 
     }
 
     hideEditBtn = (tf) => {
         this.setState({
-            ...this.state,
+            ate,
             hideEditBtn : tf,
         }) 
     }

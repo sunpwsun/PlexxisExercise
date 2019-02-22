@@ -44,7 +44,7 @@ class EditBranchModal extends Component {
     onBranchChange = (e) => {
 
         this.setState({
-            ...this.state,
+            ate,
             branchName: e.target.value
         })
     }
@@ -65,7 +65,7 @@ class EditBranchModal extends Component {
         const name = this.state.branchName.trim()
 
         this.setState({
-            ...this.state,
+            ate,
             branchName: name
         })
 
