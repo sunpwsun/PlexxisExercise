@@ -9,9 +9,9 @@ class CompanyButtons extends Component {
     state = {
        
         // edit modal
-        modalCityIsOpen: false,         // type: 0
-        modalBranchIsOpen: false,       // type: 1
-        modalProfessionIsOpen: false,   // type: 2
+        modalCityIsOpen: false,       
+        modalBranchIsOpen: false,      
+        modalProfessionIsOpen: false,  
         modalTitle : '',
         modalMessage: '',
         reload: false,

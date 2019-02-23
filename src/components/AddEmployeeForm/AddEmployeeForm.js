@@ -1,27 +1,9 @@
 import React, { Component } from 'react'
-import ErrorModal from '../Modal/ErrorModal'
+import NoticeModal from '../Modal/NoticeModal'
 import './AddEmployeeForm.css'
 import * as tools from '../../tools'
-
+import { URL } from '../../config'
 import axios from 'axios'
-
-const styles = {
-    wrapper: {
-        height: '100vh',
-        width: '80%',
-        margin: '0 auto'
-    },
-    header: {},
-    content: {
-        paddingTop: '20px',
-        paddingBottom: '300px'
-    }
-}
-
-
-
-const URL = 'http://localhost:8080'
-
 
 class AddEmployeeForm extends Component {
 
@@ -84,12 +66,12 @@ class AddEmployeeForm extends Component {
 
     onCancel = () => {
         this.props.onHide()
-        this.props.hideEditBtn(false)
+        this.props.onHideEditBtn(false)
     }
 
-    onAddEmployee = () => {
+    onAddEmployee = async () => {
 
-        // remove blanks of front and back
+        // remove blanks at front and back of name, color, code
         this.setState( { 
             name: this.state.name.trim(),
             color : this.state.color.trim().toLocaleLowerCase(),
@@ -153,27 +135,19 @@ class AddEmployeeForm extends Component {
             return
         }
 
-        // if all is valid, save
-        axios.post( URL + '/api/employee', { name, code, professionId, color, cityId, branchId, assigned } )
+        // if all is valid, save it
+        const _assigned = assigned === 'true' ? true : false
+        await axios.post( URL + '/api/employee', { name, code, professionId, color, cityId, branchId, assigned: _assigned } )
             .then(res => {
-console.log('[axios post res]', res)
-
-                if( res.data.message !== 'OK') {
+                if( res.data.message !== 'OK')
                     this.openModal( 'Error', res.data.message.errors[0].message, false)
-                    return
-                }
+                else 
+                    // Success pop-up 
+                    this.openModal( 'Employee Added', `New employee '${name}' was successfully added.`, true)
             })
-            //.catch( err => console.log( '[ POST ERROR ]', err))
-            .catch( err => {
-                this.openModal( 'Error', err , false)
-                return
+            .catch( err => {    
+                this.openModal( 'Error', `ID: ${this.state.editEmployeeId}, ${err.response.data.message}` , false)
             })
-
-
-        // Success pop-up 
-        this.openModal( 'Employee Added', `New employee '${name}' was successfully added.`, true)
-
-
     }
 
     onNameChange = (e) => {     
@@ -184,6 +158,7 @@ console.log('[axios post res]', res)
 
     onCodeChange = (e) => {
 
+        // change all the characters to upper case
         const v = e.target.value.toUpperCase()
     
         // length of code must be 4 characters
@@ -226,6 +201,7 @@ console.log('[axios post res]', res)
 
         const { professions, cities, branches } = this.state
 
+        // Profession combobox
         let professionSelect = []
         professionSelect[0] = ( <option disabled selected>Profession</option> )
         professions.forEach( p => {
@@ -236,7 +212,7 @@ console.log('[axios post res]', res)
         })
 
 
-
+        // City profession
         let citySelect = []
         citySelect[0] = ( <option disabled selected>City</option> )
         cities.forEach( c => {
@@ -245,7 +221,7 @@ console.log('[axios post res]', res)
             citySelect[ c.cityId ] = ( <option value={c.cityId} >{c.name}</option>  )
         })
 
-
+        // Branch profession
         let branchSelect = []
         branchSelect[0] = ( <option disabled selected>Branch</option> )
         branches.forEach( b => {
@@ -295,7 +271,7 @@ console.log('[axios post res]', res)
                     
                 </div> 
 
-                <ErrorModal
+                <NoticeModal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
                     closeModal={this.closeModal}

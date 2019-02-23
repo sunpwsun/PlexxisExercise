@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
-import './EditCityModal.css'
+import './EditModal.css'
 import axios from 'axios'
 import ToggleButton from 'react-toggle-button'
-import ErrorModal from './ErrorModal'
+import NoticeModal from './NoticeModal'
+import { URL } from '../../config'
 
 const customStyles = {
     content : {
@@ -16,11 +17,7 @@ const customStyles = {
     }
 }
 
-Modal.setAppElement("#root");
-
-const URL = 'http://localhost:8080'
-
-
+Modal.setAppElement("#root")
 
 
 class EditCityModal extends Component {
@@ -28,8 +25,6 @@ class EditCityModal extends Component {
     state = {
 
         cities : [],
-        branches : [],
-        professions : [],
 
         rows : [],
         active : [],
@@ -85,58 +80,49 @@ class EditCityModal extends Component {
             return
         }
 
-
-        // save
+        // save the new city
         await axios.post( URL + '/api/city', { name, active:true } )
             .then(res => {
 
                 if( res.data.message !== 'OK') {
                     this.openModal( 'Error', res.data.message.errors[0].message, false)
-                    return
                 }
+                else 
+                    // Success pop-up 
+                    this.openModal( 'City Added', `City '${name}' was successfully added.`, false )
             })
             .catch( err => {
-                this.openModal( 'Error', err , false)
+                this.openModal( 'Error', `ID: ${this.state.cityName}, ${err.response.data.message}` , false)
                 return
             })
 
 
-        this.openModal( 'City Added', `City '${name}' was successfully added.`, false )
-        
-
         // fetch updated cities
         await axios.get( URL + '/api/cities'  ).then( res => { 
-            //console.log('[edit modal cities]', res.data)
             this.setState( { cities : res.data, cityName : '' } )
         })
-
-
     }
 
     afterOpenModal = () => {
         // references are now sync'd and can be accessed.
-        this.subtitle.style.color = '#f00';
+        this.subtitle.style.color = '#f00'
     }
 
-    toggleSwitch = async ( i, value ) => {
-
+    toggleSwitch = async ( i ) => {
+      
         // update toggle value
         await axios.put( URL + '/api/city/' + this.state.cities[ i ].cityId, {name: this.state.cities[ i ].name, active : !this.state.cities[ i ].active })
             .then(res => {
-
                 if( res.data.message !== 'OK') {
                     this.openModal( 'Error', 'Updata Error! Try again.', false)
-                    return
                 }
             })
             .catch( err => {
-                this.openModal( 'Error', err , false)
-                return
+                this.openModal( 'Error', `City : ${this.state.cities[ i ].name}, ${err.response.data.message}` , false)
             })
 
         // fetch updated cities
         await axios.get( URL + '/api/cities'  ).then( res => { 
-            //console.log('[edit modal cities]', res.data)
             this.setState( { cities : res.data, cityName : null } )
         })
     }
@@ -177,22 +163,22 @@ class EditCityModal extends Component {
 
     render() {
         
-
+        // build city list
         let rows = []
         rows.push(
-            <div className='rowHeader' style={{color:'black'}}>
+            <div className='rowHeader' style={{color:'black'}} >
                 <div style={{textAlign:'center'}}>Name</div>
                 <div style={{textAlign:'center'}}>Active</div>
             </div>
         )
         for( let i = 0 ; i < this.state.cities.length ; i++ ) {
             rows.push(
-                <div className='rowContainer'>
+                <div className='rowContainer'  >
                     <div className='rowName'>{this.state.cities[ i ].name}</div>
                     <div className='switch' >
                         <ToggleButton
                             value={ this.state.cities[ i ].active }
-                            onToggle={(value) => this.toggleSwitch(i, value)} />
+                            onToggle={() => this.toggleSwitch( i )} />
                     </div>
                 </div>
             )
@@ -204,9 +190,8 @@ class EditCityModal extends Component {
                 <Modal
                     isOpen={this.props.isOpen}
                     onAfterOpen={this.afterOpenModal}
-                    // onRequestClose={this.props.onRequestClose}
                     style={customStyles}
-                    contentLabel="Example Modal"
+                    contentLabel='CityModal'
                     >
 
                     <h2 ref={subtitle => this.subtitle = subtitle}>{this.props.title}</h2>
@@ -222,7 +207,7 @@ class EditCityModal extends Component {
                     <div className='modalCloseBtn' onClick={() => this.props.closeModal(`${this.props.title}`)}>Close</div>
                 </Modal>
 
-                    <ErrorModal
+                    <NoticeModal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
                         closeModal={this.closeModal}

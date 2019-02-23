@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
-import './ErrorModal.css'
+import './NoticeModal.css'
 
 const customStyles = {
     content : {
@@ -13,16 +13,13 @@ const customStyles = {
     }
 }
 
-Modal.setAppElement("#root");
+Modal.setAppElement("#root")
 
-
-
-class ErrorModal extends Component {
+class NoticeModal extends Component {
  
-
     afterOpenModal = () => {
         // references are now sync'd and can be accessed.
-        this.subtitle.style.color = '#f00';
+        this.subtitle.style.color = '#f00'
       }
 
     render() {
@@ -32,7 +29,6 @@ class ErrorModal extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 onAfterOpen={this.afterOpenModal}
-                // onRequestClose={this.props.onRequestClose}
                 style={customStyles}
                 >
 
@@ -56,4 +52,4 @@ class ErrorModal extends Component {
     }
 }
 
-export default ErrorModal
+export default NoticeModal

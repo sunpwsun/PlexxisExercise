@@ -1,28 +1,21 @@
-
-const cors = require('cors')
-const mysql = require('mysql')
-
-
-// 아래 참고해서 api 분리
-// https://github.com/BumjuneKim/sequelize_tutorial/blob/master/app/models/books.js
-//
-
 module.exports = ( app ) => {
 
     const { Employees, Branches, Cities, Professions } = require('../models')
 
 
     app.get('/api/employees',  (req, res, next) => {
-    console.log('[GET] /api/employees')
+        console.log('[GET] /api/employees')
 
         Employees.findAll({  include : [{ model : Cities }, { model : Branches }, { model : Professions } ] })
             .then( e => {
-                res.setHeader('Content-Type', 'application/json')
+                
                 res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
 
@@ -32,32 +25,31 @@ module.exports = ( app ) => {
     
         Employees.findOne( { where : { employeeId },  include : [{ model : Cities }] } )
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
     
     app.post('/api/employee/', (req, res, next) => {
         const { name, code, professionId, color, cityId, branchId, assigned } = req.body
-console.log('[POST] /api/employee/', name, code, professionId, color, cityId, branchId, assigned )
+        console.log('[POST] /api/employee/', name, code, professionId, color, cityId, branchId, assigned )
     
         Employees.create( { 
                 employeeId : null,      // auto increment
                 name, code, professionId, color, cityId, branchId, assigned
             })
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json({message: 'OK' } )
             })
             .catch( err => {
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
+                console.log('[POST Employee err]', err)
+                res.status( 400 )
+                res.json({message: err })
             })
     })
 
@@ -65,7 +57,8 @@ console.log('[POST] /api/employee/', name, code, professionId, color, cityId, br
 
         const employeeId = req.params.id
         const { name, code, professionId, color, cityId, branchId, assigned } = req.body
-console.log('[PUT] /api/employee/', employeeId, name, code, professionId, color, cityId, branchId, assigned )
+        console.log('[PUT] /api/employee/', employeeId, name, code, professionId, color, cityId, branchId, assigned )
+    
         Employees.update( { name, code, professionId, color, cityId, branchId, assigned }, { where : { employeeId } } )
             .then( () => {
                 return Employees.findOne({
@@ -73,52 +66,63 @@ console.log('[PUT] /api/employee/', employeeId, name, code, professionId, color,
                 })
             })
             .then((e) => {
-                console.log('[PUT] Updated employee: ')
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                if( !e ) {
+                    res.status( 404 )
+                    res.json({message: 'NO_RECORD' })
+
+                    return
+                }
+
+                res.status(200)
                 res.json( {message: 'OK' }  )
             })
             .catch( err => {
-                console.log('[put err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message:err})
+                console.log('[PUT Employee err]', err)
+                
+                res.status( 400 )
+                res.json({message:err})
             })
     })
 
     app.delete( '/api/employee/:id', (req, res, next) => {
 
         const employeeId = req.params.id
-console.log('[DELETE] /api/employee/', employeeId )
+        console.log('[DELETE] /api/employee/', employeeId )
+
         Employees.destroy( { where : { employeeId } } )
             .then( (e) => {
-                if( !e )
-                    throw "NO_RECORD"
-                console.log('    Delete employee: ', e )
-                res.json( {message:'DELETED', cnt: e} )
+                if( !e ) {
+                    res.status( 404 )
+                    res.json({message: 'NO_RECORD' })
+
+                    return
+                }
+
+                console.log('[DELETE Employee] ', e )
+                res.json( { message:'DELETED', cnt: e} )
             })
             .catch( err => {
-                console.log('[err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
+                console.log('[DELETE Employee err]', err)
+                
+                res.status( 400 )
+                res.json({message: err })
             })
     })
 
 
     // Branch APIs
-
     app.get('/api/branches', (req, res, next) => {
         console.log('[GET] /api/branches')
     
         Branches.findAll({})
             .then( e => {
-                res.setHeader('Content-Type', 'application/json')
+                
                 res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json({message: err })
             })
     })
     
@@ -128,18 +132,15 @@ console.log('[DELETE] /api/employee/', employeeId )
     
         Branches.findOne( { where : { branchId } } )
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json({message: err })
             })
     })
     
-
-
-
     app.post('/api/branch/', (req, res, next) => {
         const { name, active } = req.body
         console.log('[POST] /api/branches/', name, active )
@@ -149,41 +150,45 @@ console.log('[DELETE] /api/employee/', employeeId )
                 name, active
             })
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
-                res.json(  {message: 'OK' } )
+                res.status( 200 )
+                res.json( { message: 'OK' } )
             })
             .catch( err => {
-                console.log('[err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
+                console.log('[POST Branch err]', err)
+                
+                res.status( 400 )
+                res.json({message: err })
             })
     })
 
-
-    
     app.put( '/api/branch/:id', (req, res, next) => {
 
         const branchId = req.params.id
         const { name, active } = req.body
-console.log('[PUT] /api/branch/', branchId, name, active )
+        console.log('[PUT] /api/branch/', branchId, name, active )
+
         Branches.update( { name, active }, { where : { branchId } } )
             .then( () => {
                 return Branches.findOne({
-                    where : { name, active }
+                    where : { branchId }
                 })
             })
-            .then( (e) => {
-                console.log('[PUT] Updated branch ')
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
-                res.json(  {message: 'OK' } )
+            .then((e) => {
+                
+                if( !e ) {
+                    res.status( 404 )
+                    res.json({message: 'NO_RECORD' })
+        
+                    return
+                }
+        
+                res.status(200)
+                res.json( { message: 'OK' }  )
             })
             .catch( err => {
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )          
-                res.send({message: err })
+                console.log('[PUT Branch err]', err)
+                res.status( 400 )
+                res.json( { message:err } )
             })
     })
     
@@ -195,12 +200,13 @@ console.log('[PUT] /api/branch/', branchId, name, active )
     
         Cities.findAll({})
             .then( e => {
-                res.setHeader('Content-Type', 'application/json')
+                
                 res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
     
@@ -210,12 +216,12 @@ console.log('[PUT] /api/branch/', branchId, name, active )
     
         Cities.findOne( { where : { cityId } } )
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
     
@@ -228,15 +234,14 @@ console.log('[PUT] /api/branch/', branchId, name, active )
                 name, active
             })
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status( 200 )
                 res.json( {message: 'OK' }  )
             })
             .catch( err => {
-                console.log('[err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
+                console.log('[POST City err]', err)
+                
+                res.status( 400 )
+                res.json({message: err })
             })
     })
     
@@ -244,42 +249,45 @@ console.log('[PUT] /api/branch/', branchId, name, active )
 
         const cityId = req.params.id
         const { name, active } = req.body
-console.log('[PUT] /api/city/', cityId, name, active )
+        console.log('[PUT] /api/city/', cityId, name, active )
         Cities.update( { name, active }, { where : { cityId } } )
             .then( () => {
                 return Cities.findOne({
                     where : { cityId }
                 })
             })
-            .then( (e) => {
-                console.log('[PUT] Updated city ')
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200)
-                res.json( {message: 'OK' } )
+            .then((e) => {
+                if( !e ) {
+                    res.status( 404 )
+                    res.json({message: 'NO_RECORD' })
+        
+                    return
+                }
+        
+                res.status( 200 )
+                res.json( {message: 'OK' }  )
             })
             .catch( err => {
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
+                console.log('[PUT City err]', err)
+                
+                res.status( 400 )
+                res.json({message:err})
             })
     })
     
 
-
-
-
      // Profession APIs
      app.get('/api/professions', (req, res, next) => {
-console.log('[GET] /api/professions')
+        console.log('[GET] /api/professions')
     
         Professions.findAll({})
-            .then( e => {
-                res.setHeader('Content-Type', 'application/json')
+            .then( e => {           
                 res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
     
@@ -289,35 +297,14 @@ console.log('[GET] /api/professions')
     
         Professions.findOne( { where : { professionId } } )
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json( e )
             })
             .catch( err => {
-                console.log('[err]', err)
+                res.status( 400 )
+                res.json( { message: err }  )
             })
     })
-    app.post('/api/city/', (req, res, next) => {
-        const { name, active } = req.body
-        console.log('[POST] /api/city/', name, active )
-    
-        Cities.create( { 
-                cityId : null,
-                name, active
-            })
-            .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
-                res.json( {message: 'OK' }  )
-            })
-            .catch( err => {
-                console.log('[err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err })
-            })
-    })
-
 
     app.post('/api/profession/', (req, res, next) => {
         const { name, active } = req.body
@@ -328,42 +315,44 @@ console.log('[GET] /api/professions')
                 name, active
             })
             .then( e => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                res.status(200)
                 res.json( {message: 'OK' } )
             })
             .catch( err => {
-                console.log('[err]', err)
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message:'err'})
+                
+                res.status( 400 )
+                res.json( { message: err } )
             })
     })
-    
-
 
     app.put( '/api/profession/:id', (req, res, next) => {
 
         const professionId = req.params.id
         const { name, active } = req.body
-console.log('[PUT] /api/profession/', professionId, name, active )
+        console.log('[PUT] /api/profession/', professionId, name, active )
+        
         Professions.update( { name, active }, { where : { professionId } } )
             .then( () => {
                 return Professions.findOne({
-                    where : { name, active }
+                    where : { name, active  }
                 })
             })
             .then( (e) => {
 
-                console.log('[PUT] Updated profession ')
-                res.setHeader('Content-Type', 'application/json');
-                res.status(200);
+                if( !e ) {
+                    res.status( 404 )
+                    res.json({message: 'NO_RECORD' })
+        
+                    return
+                }
+
+                res.status( 200 )
                 res.json( {message: 'OK' }  )
             })
             .catch( err => {
-                res.setHeader('Content-Type', 'application/json')
-                res.status( 200 )           //// check return code  again
-                res.send({message: err})
+                
+                res.status( 400 )
+                res.json({message: err})
             })
     })   
 }

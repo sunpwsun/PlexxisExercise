@@ -26,20 +26,20 @@ class App extends React.Component {
         })
     }
 
-    hideAddBtn = (tf) => {
+    onHideAddBtn = (tf) => {
         this.setState({
             hideAddBtn : tf,
         }) 
     }
 
-    hideEditBtn = (tf) => {
+    onHideEditBtn = (tf) => {
         this.setState({
             hideEditBtn : tf,
         }) 
     }
+    
     render() {
-        const { employees, cities, branches, professions } = this.state
-
+  
         return (
             <div className="App">
             <Title />
@@ -49,11 +49,12 @@ class App extends React.Component {
                     <EmployeeButtons showDeleteButton={this.state.showDeleteButton} 
                                     selected={this.state.selected} 
                                     hideAddBtn={this.state.hideAddBtn} 
-                                    hideEditBtn={this.hideEditBtn} />
+                                    onHideEditBtn={this.onHideEditBtn} />
 
                     <TableContainer onShowDeleteButton={this.onShowDeleteButton}
-                                    hideAddBtn={this.hideAddBtn}  
-                                    hideEditBtn={this.state.hideEditBtn}  />
+                                    onHideAddBtn={this.onHideAddBtn}  
+                                    hideEditBtn={this.state.hideEditBtn}
+                                    onHideEditBtn={this.onHideEditBtn}   />
                     <CompanyButtons />
                 </div>
             </div>

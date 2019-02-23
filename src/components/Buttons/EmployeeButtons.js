@@ -1,47 +1,44 @@
 import React, { Component } from 'react'
 import AddEmployeeForm from '../AddEmployeeForm/AddEmployeeForm'
-import ErrorModal from '../Modal/ErrorModal'
+import NoticeModal from '../Modal/NoticeModal'
 import axios from 'axios'
 import './EmployeeButtons.css'
+import { URL } from '../../config'
 
-
-const URL = 'http://localhost:8080'
 
 class Buttons extends Component {
 
     state = {
         addEmployeeForm : false,
 
-        // modal
+        // notice modal
         modalIsOpen: false,
         modalTitle : '',
         modalMessage: ''
     }
 
+    // open notice modal
     openModal = ( modalTitle, modalMessage, reload ) => {      
         this.setState({modalIsOpen: true, modalTitle, modalMessage, reload })
     }
       
+     // close notice modal
     closeModal = ( title ) => {
         this.setState({modalIsOpen: false})
     }
 
-
+    // show the adding employee form
     addEmployee = () => {
         this.setState({ addEmployeeForm : true })
-        this.props.hideEditBtn( true )
+        this.props.onHideEditBtn( true )
     }
 
+    // Hide the adding employee form
     onHide = () => {
         this.setState({ addEmployeeForm : false })
     }
 
     deleteEmployee = async () => {
-
-
-        // ask if really want to delete
-
-
 
         let deleted = []
         for( let i = 0 ; i < this.props.selected.length ; i++ ) {
@@ -49,8 +46,6 @@ class Buttons extends Component {
 
                 await axios.delete( URL + '/api/employee/' + i ).then(res => {
             
-                    // successful popup message
-                  
                     if( res.data.message === 'DELETED' ) {
                         //this.openModal( 'Deleted', `Employee ID ${i} deleted!`)
                         console.log('Deleted', `Employee ID ${i} deleted!`)
@@ -73,10 +68,9 @@ class Buttons extends Component {
             newSelected[ deleted[i] ] = false
         }
 
-        console.log('newSelected', newSelected )
-
         if( deleted.length > 0 ) {
     
+            // successful popup message
             this.openModal( 'Deleted', `${deleted.length} Employee(s) deleted!`, true)
         }
     }
@@ -99,11 +93,10 @@ class Buttons extends Component {
                 }
                 {
                     this.state.addEmployeeForm  &&
-                    <AddEmployeeForm onHide={this.onHide} hideEditBtn={this.props.hideEditBtn}/>
-                       
+                    <AddEmployeeForm onHide={this.onHide} onHideEditBtn={this.props.onHideEditBtn}/>
                 }
                 
-                <ErrorModal
+                <NoticeModal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
                     closeModal={this.closeModal}

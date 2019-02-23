@@ -1,7 +1,4 @@
-import React, { Component, useState } from "react"
-import ReactDOM from "react-dom"
-import styled from 'styled-components'
-import { Select } from '../Table/Styles'
+import React, { Component } from "react"
 import TableMain from './TableMain'
 
 
@@ -11,7 +8,13 @@ class TableContainer extends Component {
         
         return (
             <div className='App'>
-                <TableMain infinite={false} onShowDeleteButton={this.props.onShowDeleteButton} hideAddBtn={this.props.hideAddBtn} hideEditBtn={this.props.hideEditBtn} />
+                <TableMain 
+                    infinite={false} 
+                    onShowDeleteButton={this.props.onShowDeleteButton} 
+                    onHideAddBtn={this.props.onHideAddBtn} 
+                    hideEditBtn={this.props.hideEditBtn} 
+                    onHideEditBtn={this.props.onHideEditBtn}
+                />
             </div>
         )
     }

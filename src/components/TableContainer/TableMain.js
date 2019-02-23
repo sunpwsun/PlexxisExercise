@@ -4,34 +4,16 @@ import EditEmployeeForm from '../EditEmployeeForm/EditEmployeeForm'
 import { Input } from '../Table/Styles'
 import Table from '../Table/Table'
 import axios from 'axios'
-import ReactTooltip from 'react-tooltip'
-
-const URL = 'http://localhost:8080'
+import { URL } from '../../config'
 
 
-// Simulate a server
+// fetch data from server, and return rows fot building columns and page count
 const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
 
     let employees = []
-    let cities = []
-    let branches = []
-    let professions = []
 
     await axios.get( URL + '/api/employees'  ).then( res => {
-        console.log('[employees]', res.data)
         employees = res.data
-    })
-    await axios.get( URL + '/api/cities'  ).then( res => { 
-        console.log('[cities]', res.data)
-        cities = res.data
-    })
-    await axios.get( URL + '/api/branches'  ).then( res => {
-        console.log('[branches]', res.data)
-        branches = res.data
-    })
-    await axios.get( URL + '/api/professions'  ).then( res => {
-        console.log('[professions]', res.data)
-        professions = res.data
     })
 
 
@@ -39,7 +21,6 @@ const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
     const filtersArr = Object.entries(filters)
 
     // Get our base data
-    //let rows = serverData(25)
     let rows = employees.map( d=> {
 
         return {
@@ -57,7 +38,7 @@ const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
             branch: d.branch.name,
             branchId: d.branchId,
             branchActive: d.branch.active,
-            assigned: d.assigned ? 'true' : 'false',
+            assigned: d.assigned,
             edit : d.employeeId,
         }
     })
@@ -96,7 +77,7 @@ const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
 const initSelected = new Array(1000).fill(false)
 
 
-export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn }) {
+export default function({ infinite, onShowDeleteButton, onHideAddBtn, hideEditBtn, onHideEditBtn }) {
 
     // define state
     const [ data, setData ] = useState([])
@@ -104,9 +85,8 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
     const currentRequestRef = useRef()  
     const [ selected, setSelected ] = useState( initSelected )
     const [ editCellId, setEditCellId ] = useState( 0 )
-    const [ rowsInPage, setRowsInPage ] = useState( [] )
 
-    // makes table columns
+    // make table columns
     const columns = [
 
         {
@@ -156,7 +136,6 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
         },
         {
             Header: 'Code',
-            // id: "code",
             accessor: 'code',
             minWidth: 100,
             maxWidth: 140,
@@ -170,28 +149,23 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
             minWidth: 160,
             maxWidth: 200,
         },
-
-
         {
             Header: "Color",
             accessor: "color",
             width: 130,
             Cell: row => (
                 <div>
-                    <div data-tip data-for='`${row.value}`'
+                    <div
                         style={{
                             width: `100%`,
                             minWidth: "5px",
                             height: "20px",
-                            // backgroundColor: `hsla(${row.value}, 100%, 45%, 1)`,
                             backgroundColor: `${row.value}`,
                             color : `${row.value}`,
                             borderRadius: "2px",
                             transition: "all .4s ease"
                         }}
-                    >
-                    {row.value}
-                    </div>
+                    />
  
                 </div>
             )
@@ -199,7 +173,6 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
         {
             Header: "City",
             accessor: "city",
-            aggregate: "average",
             minWidth: 100,
             maxWidth: 180,
         },
@@ -214,10 +187,10 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
             accessor: "assigned",
             width: 100,
             Cell : row => (
-                row.value === 'true' ?
-                <img style={{paddingLeft:30}} width='20%' alt='true' src={`../images/true_icon.png` } />
+                row.value ?
+                <img style={{paddingLeft:30}} width='20%' alt="" src={`../images/true_icon.png` } />
                 :
-                <img style={{paddingLeft:30}} width='20%' alt='false' src={`../images/false_icon.png` } />
+                <img style={{paddingLeft:30}} width='20%' alt="" src={`../images/false_icon.png` } />
             )
         },
         {
@@ -229,7 +202,7 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
                     ( editCellId < 1  && !hideEditBtn ) &&
                         <div className='editButton' onClick={()=>{
                             setEditCellId( row.value )
-                            hideAddBtn(true)
+                            onHideAddBtn(true)
                         }}>Edit</div>
                     }
                 </div>
@@ -241,12 +214,18 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
     function checkAllUnselected( newSelected ) {
         
         for( let i = 0 ; i < newSelected.length ; i++ ) {
+
+            // If there is at least one checked box, hides edit buttons and shows DELETE button
             if( newSelected[ i ] ) {
                 onShowDeleteButton( true, newSelected )
+                onHideEditBtn( true )
                 return
             }
         }
+
+        // If there is no checked box, shows eidt buttons and hides DELETE button
         onShowDeleteButton( false )
+        onHideEditBtn( false )
     }
 
 
@@ -307,8 +286,9 @@ export default function({ infinite, onShowDeleteButton, hideAddBtn, hideEditBtn 
     return (
         <div>
             {
+                // show editing form only when any edit button clicked
                 editCellId > 0 &&
-                <EditEmployeeForm data={data} editCellId={editCellId} onHide={onHideEditForm} hideAddBtn={hideAddBtn}/>
+                <EditEmployeeForm data={data} editCellId={editCellId} onHide={onHideEditForm} onHideAddBtn={onHideAddBtn}/>
             }
             <Table
                 {...{

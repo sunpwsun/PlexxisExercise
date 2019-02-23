@@ -1,24 +1,9 @@
 import React, { Component } from 'react'
-import ErrorModal from '../Modal/ErrorModal'
+import NoticeModal from '../Modal/NoticeModal'
 import './EditEmployeeForm.css'
 import * as tools from '../../tools'
-
+import { URL } from '../../config'
 import axios from 'axios'
-
-const styles = {
-    wrapper: {
-        height: '100vh',
-        width: '80%',
-        margin: '0 auto'
-    },
-    header: {},
-    content: {
-        paddingTop: '20px',
-        paddingBottom: '300px'
-    }
-}
-
-const URL = 'http://localhost:8080'
 
 
 class EditEmployeeForm extends Component {
@@ -36,7 +21,7 @@ class EditEmployeeForm extends Component {
         professionId : 0,
         cityId : 0,
         branchId : 0,
-        assigned : 0,
+        assigned : false,
 
         // modal
         modalIsOpen: false,
@@ -74,14 +59,11 @@ class EditEmployeeForm extends Component {
 
 
         const { data, editCellId } = this.props
-        //console.log('[data, editCellId]', data, editCellId )
-        
-        const index = data.findIndex( d => d.id === editCellId)
      
+        // find index of the cell at the data array
+        const index = data.findIndex( d => d.id === editCellId)
 
-
-
-
+        // bulid profession combobox
         let professionSelect = []
         professionSelect[0] = ( <option disabled>Profession</option> )
         this.state.professions.forEach( p => {
@@ -93,6 +75,7 @@ class EditEmployeeForm extends Component {
                 professionSelect[ p.professionId ] = ( <option value={p.professionId} >{p.name}</option> )
         })
 
+        // bulid city combobox
         let citySelect = []
         citySelect[0] = ( <option disabled>City</option> )
         this.state.cities.forEach( c => {
@@ -106,7 +89,7 @@ class EditEmployeeForm extends Component {
                 citySelect[ c.cityId ] = ( <option value={c.cityId} >{c.name}</option>  )
         })
 
-
+        // bulid branch combobox
         let branchSelect = []
         branchSelect[0] = ( <option disabled>Branch</option> )
         this.state.branches.forEach( b => {
@@ -120,22 +103,20 @@ class EditEmployeeForm extends Component {
         })
 
 
+        // bulid assigned combobox
         let assignedSelect = []
         assignedSelect[0] = ( <option disabled>Assigned</option> )   
 
-        if( 'true' === data[ index ].assigned ) {
-            assignedSelect[1] = ( <option selected value="true">Yes</option> )
-            assignedSelect[2] = ( <option  value="false">No</option> )
+        if( data[ index ].assigned ) {
+            assignedSelect[1] = ( <option selected value={true}>Yes</option> )
+            assignedSelect[2] = ( <option  value={false}>No</option> )
         }
         else {     
-            assignedSelect[1] = ( <option  value="true">Yes</option> )
-            assignedSelect[2] = ( <option selected value="false">No</option> )
+            assignedSelect[1] = ( <option  value={true}>Yes</option> )
+            assignedSelect[2] = ( <option selected value={false}>No</option> )
         }
 
-
-console.log( '[assignedSelect]' , assignedSelect)
-
-
+        // set init values
         this.setState({
             name : data[ index ].name,
             code : data[ index ].code,
@@ -174,12 +155,14 @@ console.log( '[assignedSelect]' , assignedSelect)
 
     onCancel = () => {
         this.props.onHide()
-        this.props.hideAddBtn(false)
+
+        // show the add button
+        this.props.onHideAddBtn(false)
     }
 
-    onSaveEmployee = () => {
+    onSaveEmployee = async () => {
 
-        // remove blanks of front and back
+        // remove blanks at front and back of name, color, code
         this.setState( { 
             name: this.state.name.trim(),
             color : this.state.color.trim().toLocaleLowerCase(),
@@ -238,30 +221,24 @@ console.log( '[assignedSelect]' , assignedSelect)
         }
 
         // validate assigned
-        if( assigned < 1 ) {
+        if( assigned === undefined ) {
             this.openModal( 'Error', 'Choose Assigned!', false)
             return
         }
 
-        // if all is valid, save
-        axios.put( URL + '/api/employee/' + this.state.editEmployeeId, { name, code, professionId, color, cityId, branchId, assigned } )
+        // if all is valid, save it
+        const _assigned = assigned === 'true' ? true : false
+        await axios.put( URL + '/api/employee/' + this.state.editEmployeeId, { name, code, professionId, color, cityId, branchId, assigned: _assigned } )
             .then(res => {
-
-
-                if( res.data.message !== 'OK') {
+                if( res.data.message !== 'OK')
                     this.openModal( 'Error', res.data.message.errors[0].message, false)
-                    return
-                }
+                else 
+                    // Success pop-up 
+                    this.openModal( 'Employee Updated', `Employee '${name}' was successfully updated.`, true)
             })
-            .catch( err => {
-                this.openModal( 'Error', err , false)
-                return
+            .catch( err => {    
+                this.openModal( 'Error', `ID: ${this.state.editEmployeeId}, ${err.response.data.message}` , false)
             })
-
-
-        // Success pop-up 
-        this.openModal( 'Employee Updated', `Employee '${name}' was successfully updated.`, true)
-
 
     }
 
@@ -273,6 +250,7 @@ console.log( '[assignedSelect]' , assignedSelect)
 
     onCodeChange = (e) => {
 
+        // change all the characters to upper case
         const v = e.target.value.toUpperCase()
     
         // length of code must be 4 characters
@@ -294,8 +272,9 @@ console.log( '[assignedSelect]' , assignedSelect)
             professionId : v
         })
     }
-    onAssignedChange= (e) => {
-  console.log('onAssignedChange', e.target.value)      
+    onAssignedChange= (e) => { 
+
+        // string -> boolean
         this.setState({
             assigned : e.target.value
         })
@@ -325,18 +304,18 @@ console.log( '[assignedSelect]' , assignedSelect)
                 <div className='edit-form-grid-container'>
             
                     <div className='indexText'>{data[ index ].id}</div>
-                    <div className='cell' onChange={this.onNameChange}>
-                        <input className='inputText' type='text' value={name}/>
+                    <div className='cell' >
+                        <input className='inputText' type='text' value={name} onChange={this.onNameChange} />
                     </div>
-                    <div className='cell' onChange={this.onCodeChange}>
-                        <input className='inputText' type='text' placeholder='Code' value={code}/>
+                    <div className='cell'>
+                        <input className='inputText' type='text' placeholder='Code' value={code} onChange={this.onCodeChange}/>
                     </div>
                     <div className='cell'>
                         <select className='Select' onChange={(e)=>this.onProfessionChange(e.target.value)}>
                             {professionSelect}
                         </select></div>
-                    <div className='cell' onChange={this.onColorChange}>
-                        <input className='inputText' type='text' placeholder='Color' value={color}/>
+                    <div className='cell'>
+                        <input className='inputText' type='text' placeholder='Color' value={color}  onChange={this.onColorChange}/>
                     </div>
                     <div className='cell'>
                         <select className='Select' onChange={this.onCityChange}>
@@ -358,7 +337,7 @@ console.log( '[assignedSelect]' , assignedSelect)
                     
                 </div> 
 
-                <ErrorModal
+                <NoticeModal
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}
                     closeModal={this.closeModal}

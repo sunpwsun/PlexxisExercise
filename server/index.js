@@ -2,7 +2,7 @@ const express = require( 'express' )
 const cors = require( 'cors' )
 const app = express()
 const bodyParser = require('body-parser')
-const employees = require( './data/employees.json' );
+//const employees = require( './data/employees.json' )
 const restapis = require('./routes/restapis')
 const sequelize = require( './models/index' ).sequelize
 sequelize.sync()
@@ -17,7 +17,6 @@ app.use( function(req, res, next) {
 
 
 // [CONFIGURE APP TO USE bodyParser]
-//app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import axios from 'axios'
 import ToggleButton from 'react-toggle-button'
-import ErrorModal from './ErrorModal'
+import NoticeModal from './NoticeModal'
+import { URL } from '../../config'
 
 const customStyles = {
     content : {
@@ -15,10 +16,7 @@ const customStyles = {
     }
 }
 
-Modal.setAppElement("#root");
-
-const URL = 'http://localhost:8080'
-
+Modal.setAppElement("#root")
 
 
 
@@ -26,9 +24,7 @@ class EditBranchModal extends Component {
  
     state = {
 
-        cities : [],
         branches : [],
-        professions : [],
 
         rows : [],
         active : [],
@@ -85,32 +81,25 @@ class EditBranchModal extends Component {
         }
 
 
-        // save
+        // save the new city
         await axios.post( URL + '/api/branch', { name, active:true } )
             .then(res => {
 
                 if( res.data.message !== 'OK') {
                     this.openModal( 'Error', res.data.message.errors[0].message, false)
-                    return
                 }
+                else 
+                    // Success pop-up 
+                    this.openModal( 'Branch Added', `Branch '${name}' was successfully added.`, false )
             })
             .catch( err => {
-                this.openModal( 'Error', err , false)
-                return
+                this.openModal( 'Error', `ID: ${this.state.branchName}, ${err.response.data.message}` , false)
             })
-
-
-        this.openModal( 'Branch Added', `Branch '${name}' was successfully added.`, false )
-        
 
         // fetch updated branches
         await axios.get( URL + '/api/branches'  ).then( res => { 
-            //console.log('[edit modal branches]', res.data)
             this.setState( { branches : res.data, branchName : '' } )
         })
-
-    
-
     }
 
     afterOpenModal = () => {
@@ -118,7 +107,7 @@ class EditBranchModal extends Component {
         this.subtitle.style.color = '#f00';
     }
 
-    toggleSwitch = async ( i, value ) => {
+    toggleSwitch = async ( i ) => {
 
         // update toggle value
         await axios.put( URL + '/api/branch/' + this.state.branches[ i ].branchId, {name: this.state.branches[ i ].name, active : !this.state.branches[ i ].active })
@@ -126,12 +115,10 @@ class EditBranchModal extends Component {
 
                 if( res.data.message !== 'OK') {
                     this.openModal( 'Error', 'Updata Error! Try again.', false)
-                    return
                 }
             })
             .catch( err => {
-                this.openModal( 'Error', err , false)
-                return
+                this.openModal( 'Error', `Branch : ${this.state.branches[ i ].name}, ${err.response.data.message}` , false)
             })
 
         // fetch updated branches
@@ -146,7 +133,10 @@ class EditBranchModal extends Component {
     }
     
     closeModal = ( title ) => {
-        this.setState({modalIsOpen: false})
+
+        this.setState({
+            modalIsOpen: false
+        })
 
         // close the employee add form
         if( title === 'Employee Added' ) {
@@ -177,6 +167,7 @@ class EditBranchModal extends Component {
 
     render() {
 
+        // build branch list
         let rows = []
         rows.push(
             <div className='rowHeader' style={{color:'black'}}>
@@ -186,12 +177,12 @@ class EditBranchModal extends Component {
         )
         for( let i = 0 ; i < this.state.branches.length ; i++ ) {
             rows.push(
-                <div className='rowContainer'>
+                <div className='rowContainer' >
                     <div className='rowName'>{this.state.branches[ i ].name}</div>
                     <div className='switch' >
                         <ToggleButton
                             value={ this.state.branches[ i ].active }
-                            onToggle={(value) => this.toggleSwitch(i, value)} />
+                            onToggle={() => this.toggleSwitch( i )} />
                     </div>
                 </div>
             )
@@ -203,9 +194,8 @@ class EditBranchModal extends Component {
                 <Modal
                     isOpen={this.props.isOpen}
                     onAfterOpen={this.afterOpenModal}
-                    // onRequestClose={this.props.onRequestClose}
                     style={customStyles}
-                    contentLabel="Example Modal"
+                    contentLabel='BranchModal'
                     >
 
                     <h2 ref={subtitle => this.subtitle = subtitle}>{this.props.title}</h2>
@@ -221,7 +211,7 @@ class EditBranchModal extends Component {
                     <div className='modalCloseBtn' onClick={() => this.props.closeModal(`${this.props.title}`)}>Close</div>
                 </Modal>
 
-                    <ErrorModal
+                    <NoticeModal
                         isOpen={this.state.modalIsOpen}
                         onRequestClose={this.closeModal}
                         closeModal={this.closeModal}

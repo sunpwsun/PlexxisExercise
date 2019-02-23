@@ -21,7 +21,6 @@ db.sequelize = sequelize
 db.Sequelize = Sequelize
 
 
-
 db.Cities = require( './cities' )( sequelize, Sequelize )
 db.Branches = require( './branches' )( sequelize, Sequelize )
 db.Professions = require( './professions' )( sequelize, Sequelize )
