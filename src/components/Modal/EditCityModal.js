@@ -56,7 +56,7 @@ class EditCityModal extends Component {
         }
 
 
-        // remove frnt and back blanks
+        // remove front and back blanks
         const name = this.state.cityName.trim()
 
         this.setState({

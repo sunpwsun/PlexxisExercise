@@ -54,7 +54,7 @@ class EditProfessionModal extends Component {
         }
 
 
-        // remove frnt and back blanks
+        // remove front and back blanks
         const name = this.state.professionName.trim()
 
         this.setState({

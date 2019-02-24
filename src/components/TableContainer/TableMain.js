@@ -7,6 +7,10 @@ import axios from 'axios'
 import { URL } from '../../config'
 
 
+// array having info if selected ot unselected at each row
+// employeeId is the index
+const initSelected = []
+
 // fetch data from server, and return rows fot building columns and page count
 const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
 
@@ -74,9 +78,6 @@ const getServerData = async ({ filters, sortBy, pageSize, pageIndex }) => {
 }
 
 
-const initSelected = new Array(1000).fill(false)
-
-
 export default function({ infinite, onShowDeleteButton, onHideAddBtn, hideEditBtn, onHideEditBtn }) {
 
     // define state
@@ -104,7 +105,7 @@ export default function({ infinite, onShowDeleteButton, onHideAddBtn, hideEditBt
 
                                 checkAllUnselected( newSelected )
                                 setSelected( newSelected )
-                                
+                             
                                 }}
                                 checked={selected[ row.value ]}
                             />
