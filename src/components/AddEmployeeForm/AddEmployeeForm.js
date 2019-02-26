@@ -30,7 +30,7 @@ class AddEmployeeForm extends Component {
     }
 
     addEmployee = () => {
-        this.setState({ addEmployeeForm : true })
+        this.setState( { addEmployeeForm : true })
     }
 
     componentDidMount = async () => {
